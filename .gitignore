@@ -1,0 +1,3 @@
+riscv32/
+riscv64/
+*.o
