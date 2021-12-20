@@ -17,3 +17,7 @@ Still work in progress.
     - segmentation fault @2021/12/17
         - cause: did not handling unknown instructions (which ptr_32 is NULL)
     - invalid format in instr32.csv
+- Read registers and immediate in 32-bit instructions
+    - now can read registers and immediate, and print them out
+    - some instructions are implemented but not tested yet (mainly A, F, D extention sets)
+    - maybe can print in different format depend on the instructions
