@@ -10,7 +10,6 @@ int INS32_CNT = 0;
 
 void print_inst(INSTR *inst)
 {
-    printf("%p\n", inst);
     int len = inst->len;
 
     printf("%8lx:\t", inst->addr);
@@ -19,7 +18,14 @@ void print_inst(INSTR *inst)
     
     if(len == INS32_LEN)
     {
-        printf("\t%-10s `", inst->ptr_32->name);
+        if(inst->ptr_32 != NULL)
+        {
+            printf("\t%-10s `", inst->ptr_32->name);
+        }
+        else
+        {
+            printf("\tunknown ##################");
+        }
     }
 
 #ifdef PRINT_INSTR_BIT
@@ -83,8 +89,20 @@ void read_ins32()
     for(int i = 0; i < INS32_CNT; i++)
     {
         INS32 *now = ins32_tab + i;
-        fscanf(fp, "%hhu,%x,%s\n", &(now->type), &(now->func), now->name);
-        // printf("`%hhu,%x,%s`\n", (now->type), (now->func), now->name);
+        int s;
+        s = fscanf(fp, "%hhu,%x,%s\n", &(now->type), &(now->func), now->name);
+        if(s != 3)
+        {
+            printf("invalid format in instr32.csv:");
+            printf("%hhu,%x,%s\n", (now->type), (now->func), now->name);
+            if(now != ins32_tab)
+            {
+                printf("previous one is:");
+                printf("%hhu,%x,%s\n", ((now-1)->type), ((now-1)->func), (now-1)->name);
+            }
+            exit(0);
+        }
+        // printf("%hhu,%x,%s\n", (now->type), (now->func), now->name);
 
         switch(now->type)
         {
@@ -139,9 +157,9 @@ int read_instr(SEC_HEADER *header, FILE *fp)
         parse_instr(&inst);
 
         print_inst(&inst);
-        // stop++;
-        // if(stop == 50)
-        //     break;
+        stop++;
+        if(stop == 80)
+            break;
     }
     return(0);
 }
