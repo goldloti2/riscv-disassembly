@@ -21,31 +21,71 @@ void print_inst(INSTR *inst)
         if(inst->ptr_32 != NULL)
         {
             printf("\t%d %-10s ", inst->ptr_32->type, inst->ptr_32->name);
+            char *rd, *rs1, *rs2, *rs3;
+            uint32_t imm = inst->imm;
+            int64_t jaddr = (int64_t)inst->addr + (int64_t)inst->imm;
             if(inst->rd < 32)
-                printf("%s, ", reg[inst->rd]);
+                rd = reg[inst->rd];
             if(inst->rs1 < 32)
-                printf("%s", reg[inst->rs1]);
+                rs1 = reg[inst->rs1];
             if(inst->rs2 < 32)
-                printf(", %s", reg[inst->rs2]);
+                rs2 = reg[inst->rs2];
             if(inst->rs3 < 32)
-                printf(", %s", reg[inst->rs3]);
-            if(inst->imm_f)
+                rs3 = reg[inst->rs3];
+            
+            switch(inst->ptr_32->type)
             {
-                switch(inst->ptr_32->type)
-                {
-                    case 3:
-                        printf(", %lx (%d)", (int64_t)inst->addr + (int64_t)inst->imm, inst->imm);
-                        break;
-                    case 4:
-                        printf("%d (0x%x)", inst->imm, inst->imm);
-                        break;
-                    case 5:
-                        printf("%lx (%d)", (int64_t)inst->addr + (int64_t)inst->imm, inst->imm);
-                        break;
-                    default:
-                        printf(", %d (0x%x)", inst->imm, inst->imm);
-                        break;
-                }
+                case 0: case 12:
+                    printf("%s, %s, %s", 
+                            rd, rs1, rs2);
+                    break;
+                case 1:
+                    printf("%s, %s, %d (0x%x)",
+                            rd, rs1, imm, imm);
+                    break;
+                case 2:
+                    printf("%s, %s, %d",
+                            rs1, rs2, imm);
+                    break;
+                case 3:
+                    printf("%s, %s, %lx (%d)",
+                            rs1, rs2, jaddr, imm);
+                    break;
+                case 4:
+                    printf("%s, %d (0x%x)",
+                            rd, imm, imm);
+                    break;
+                case 5:
+                    printf("%s, %lx (0x%x)",
+                            rd, jaddr, imm);
+                    break;
+                case 6: case 7:
+                    printf("%s, %s, %d",
+                            rd, rs1, imm);
+                    break;
+                case 8:
+                    printf("%s, %d, %d",
+                            rd, inst->rs1, imm);
+                    break;
+                case 9:
+                    printf("%s, %s, %x",
+                            rd, rs1, imm);
+                    break;
+                case 10:
+                    printf("%s, %s, %s, %x",
+                            rd, rs1, rs2, imm);
+                    break;
+                case 11:
+                    printf("%s, %s, %s, %s",
+                            rd, rs1, rs2, rs3);
+                    break;
+                case 13: case 14:
+                    printf("%s, %s",
+                            rd, rs1);
+                    break;
+                default:
+                    printf("unknown type ########");
+                    break;
             }
         }
         else

@@ -26,3 +26,4 @@ Still work in progress.
 - Bug fixed:
     - segmentation fault in parse_instr(), read_instr.c
         - cause: cannot find matched instruction, letting inst->ptr_32 be a NULL pointer
+- Slightly adjust the final output format
