@@ -21,3 +21,8 @@ Still work in progress.
     - now can read registers and immediate, and print them out
     - some instructions are implemented but not tested yet (mainly A, F, D extention sets)
     - maybe can print in different format depend on the instructions
+
+2021/12/22
+- Bug fixed:
+    - segmentation fault in parse_instr(), read_instr.c
+        - cause: cannot find matched instruction, letting inst->ptr_32 be a NULL pointer
