@@ -27,3 +27,8 @@ Still work in progress.
     - segmentation fault in parse_instr(), read_instr.c
         - cause: cannot find matched instruction, letting inst->ptr_32 be a NULL pointer
 - Slightly adjust the final output format
+
+2021/12/28
+- New features: RVC instruction set (2/3 tables finished)
+    - rewrite existing functions to process RVC (print_inst(), parse_instr(), and read_ins_file())
+    - instr16.csv for RVC instruction set

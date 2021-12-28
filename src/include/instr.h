@@ -7,7 +7,7 @@ typedef struct {
     uint32_t func;
     uint8_t type;
     char name[31];
-}INS32;
+}INS_ENT;
 
 #define INS16_LEN 16
 #define INS32_LEN 32
@@ -21,17 +21,24 @@ typedef struct {
 #define INS32_RS2SHFT 20
 #define INS32_RS3SHFT 27
 
+#define INS16_FLMASK 0x007C
+#define INS16_FSMASK 0x001C
+#define INS16_SLMASK 0x0F80
+#define INS16_SSMASK 0x0380
+#define INS16_FSHFT  2
+#define INS16_SSHFT  7
+
 typedef struct {
     union INST {
         uint32_t inst;
         uint8_t  readin[4];
     }inst;
     uint64_t addr;
-    int len;
+    int8_t len;
 
-    INS32 *ptr_32;
+    INS_ENT *ins_ptr;
     int32_t imm;
-    uint8_t rd, rs1, rs2, rs3, imm_f;
+    uint8_t rd, rs1, rs2, rs3;
 }INSTR;
 
 char *reg[] = {"zero", "ra", "sp", "gp",
