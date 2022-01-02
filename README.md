@@ -32,3 +32,10 @@ Still work in progress.
 - New features: RVC instruction set (2/3 tables finished)
     - rewrite existing functions to process RVC (print_inst(), parse_instr(), and read_ins_file())
     - instr16.csv for RVC instruction set
+
+2022/1/2
+- RVC instruction set (cont.)
+    - all instructions are in instr16.csv
+    - outputs and immediate parsing of instructions in 3rd table have not finish yet (outputs not implemented yet, immediate finished but not tested)
+- Add another test code in test2/
+    - same source code, but without linking
