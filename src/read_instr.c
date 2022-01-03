@@ -84,7 +84,6 @@ void print_inst(INSTR *inst)
                             rd, rs1);
                     break;
                 default:
-                    printf("unknown type ########");
                     break;
             }
         }
@@ -93,28 +92,50 @@ void print_inst(INSTR *inst)
             printf("\t\t%-10s ", inst->ins_ptr->name);
             switch(inst->ins_ptr->type)
             {
-                case 0: case 6: case 8:
-                    printf("%s, %d (0x%04x)",
+                case 0: case 6: case 8: case 17: case 18:
+                    printf("%s, %d (0x%x)",
                             rd, imm, imm);
                     break;
-                case 1: case 5: case 9: case 10: case 11:
-                    printf("%s, %s, %d (0x%04x)",
+                case 1:  case 2:  case 5: case 9: case 10:
+                case 11: case 15: case 16:
+                    printf("%s, %s, %d (0x%x)",
                             rd, rs1, imm, imm);
                     break;
-                case 12:
+                case 3: case 4:
+                    printf("%s, %s, %d (0x%x)",
+                            rs1, rs2, imm, imm);
+                    break;
+                case 7:
+                    printf("%d (0x%x)",
+                            imm, imm);
+                    break;
+                case 12: case 21:
                     printf("%s, %s, %s",
                             rd, rs1, rs2);
                     break;
                 case 13:
-                    printf("%lx (0x%04x)",
+                    printf("%lx (0x%x)",
                             jaddr, imm);
                     break;
                 case 14:
-                    printf("%s, %lx (0x%04x)",
+                    printf("%s, %lx (0x%x)",
                             rs1, jaddr, imm);
                     break;
+                case 19:
+                    printf("%s",
+                            rs1);
+                    break;
+                case 20:
+                    printf("%s, %s",
+                            rd, rs2);
+                    break;
+                case 22: case 23:
+                    printf("%s, %d (0x%x)",
+                            rs2, imm, imm);
+                    break;
+                default:
+                    break;
             }
-            // rdrrr
         }
     }
     else
@@ -271,8 +292,8 @@ void parse_instr(INSTR *inst)
                 case 0: case 1: case 2:
                     inst->rd = ((ins_line & INS16_FSMASK) >> INS16_FSHFT) + 8;
                     break;
-                case 5:  case 6:  case 8: case 15: case 16:
-                case 17: case 18: case 20:
+                case 5:  case 6:  case 8:  case 15: case 16:
+                case 17: case 18: case 20: case 21:
                     inst->rd = (ins_line & INS16_SLMASK) >> INS16_SSHFT;
                     break;
                 case 9: case 10: case 11: case 12:
@@ -310,7 +331,6 @@ void parse_instr(INSTR *inst)
                 default: inst->rs2 = 32; break;
             }
 
-            // rdrrr
             //  filter immediate
             int32_t s1, s2 = 0;
             switch(type)
@@ -381,7 +401,7 @@ void parse_instr(INSTR *inst)
                     inst->imm = s1;
                     break;
                 case 17:
-                    s1 = (ins_line >> 1) & 0x18;
+                    s1 = (ins_line >> 2) & 0x18;
                     s1 = s1 | ((ins_line >> 7) & 0x20);
                     s1 = s1 | ((ins_line << 4) & 0x1c0);
                     inst->imm = s1;
@@ -395,10 +415,12 @@ void parse_instr(INSTR *inst)
                 case 22:
                     s1 = (ins_line >> 7) & 0x38;
                     s1 = s1 | ((ins_line >> 1) & 0x1c0);
+                    inst->imm = s1;
                     break;
                 case 23:
                     s1 = (ins_line >> 7) & 0x3c;
                     s1 = s1 | ((ins_line >> 1) & 0xc0);
+                    inst->imm = s1;
                     break;
                 default: break;
             }

@@ -1,7 +1,11 @@
 # RISC-V Disassembler
 
-This is a self-made RISC-V Disassembler, with RV64I, M, A, F, D extension.  
+This is a self-made RISC-V Disassembler, with RV64I, M, A, F, D, and RVC (compressed) extension.  
 Still work in progress.  
+
+## Future Plan
+
+- read the symbol table and others
 
 ## Note
 
@@ -39,3 +43,7 @@ Still work in progress.
     - outputs and immediate parsing of instructions in 3rd table have not finish yet (outputs not implemented yet, immediate finished but not tested)
 - Add another test code in test2/
     - same source code, but without linking
+
+2022/1/3
+- RVC instruction set finish
+    - not all instructions are tested
